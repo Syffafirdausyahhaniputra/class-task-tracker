@@ -498,9 +498,28 @@ textarea:focus {
 }
 
 @media (max-width: 440px) {
+    .dashboard,
+    .topbar,
+    .task-editor,
+    .task-panel {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+    }
+
     .user-menu {
+        min-width: 0;
         align-items: flex-end;
         gap: 8px;
+    }
+
+    .user-summary {
+        min-width: 0;
     }
 
     .user-name {
@@ -509,6 +528,7 @@ textarea:focus {
     }
 
     .brand {
+        min-width: 0;
         max-width: 120px;
         line-height: 1.25;
     }
