@@ -28,6 +28,13 @@ class TaskPolicy
         return $user->role === 'teacher' && $task->created_by === $user->id;
     }
 
+    public function complete(User $user, Task $task): bool
+    {
+        return $user->role === 'student'
+            && $user->class_id !== null
+            && $user->class_id === $task->class_id;
+    }
+
     /**
      * Determine whether the user can create models.
      */

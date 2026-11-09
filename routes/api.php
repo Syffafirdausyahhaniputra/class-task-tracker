@@ -14,7 +14,13 @@ Route::get('/auth/me', [AuthController::class, 'me'])->middleware('auth:sanctum'
 Route::get('/classes', [ClassController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tasks', [TaskController::class, 'index']);
     Route::get('/tasks/{task}', [TaskController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'role:student'])->group(function () {
+    Route::post('/tasks/{task}/complete', [TaskController::class, 'complete']);
+    Route::delete('/tasks/{task}/complete', [TaskController::class, 'uncomplete']);
 });
 
 Route::middleware(['auth:sanctum', 'role:teacher'])->group(function () {

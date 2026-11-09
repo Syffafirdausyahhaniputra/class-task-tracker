@@ -21,6 +21,10 @@ class TaskResource extends JsonResource
             'due_date' => $this->due_date,
             'class_id' => $this->class_id,
             'created_by' => $this->created_by,
+            'is_done' => $this->when(
+                $request->user()?->role === 'student' && $this->relationLoaded('completions'),
+                fn (): bool => $this->completions->isNotEmpty(),
+            ),
         ];
     }
 }
