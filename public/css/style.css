@@ -256,6 +256,26 @@ textarea:focus {
     background: #fff4f5;
 }
 
+.notice-deadline {
+    border-color: #f0d99c;
+    color: #76520f;
+    background: #fff9e8;
+}
+
+.notice-deadline p {
+    margin-bottom: 8px;
+    font-weight: 750;
+}
+
+.notice-deadline ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.notice-deadline li + li {
+    margin-top: 4px;
+}
+
 .dashboard {
     display: grid;
     gap: 24px;

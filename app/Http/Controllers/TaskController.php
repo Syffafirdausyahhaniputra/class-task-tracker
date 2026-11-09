@@ -56,6 +56,41 @@ class TaskController extends Controller
         return TaskResource::collection($tasks);
     }
 
+    public function upcomingDeadlines(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $start = now();
+        $end = $start->copy()->addDays(3);
+
+        // Batasi pemberitahuan ke tugas yang boleh dilihat pengguna dan yang belum selesai.
+        $query = Task::query()
+            ->whereBetween('due_date', [$start, $end])
+            ->orderBy('due_date');
+
+        if ($user->role === 'student') {
+            $query->where('class_id', $user->class_id)
+                ->whereDoesntHave('completions', function (Builder $completionQuery) use ($user): void {
+                    $completionQuery->where('student_id', $user->id);
+                });
+        } else {
+            $query->where('created_by', $user->id);
+        }
+
+        $tasks = $query->get(['id', 'title', 'due_date']);
+
+        return response()->json([
+            'data' => [
+                'count' => $tasks->count(),
+                'days' => 3,
+                'tasks' => $tasks->map(fn (Task $task): array => [
+                    'id' => $task->id,
+                    'title' => $task->title,
+                    'due_date' => $task->due_date,
+                ]),
+            ],
+        ]);
+    }
+
     public function show(Request $request, Task $task): JsonResource
     {
         Gate::authorize('view', $task);

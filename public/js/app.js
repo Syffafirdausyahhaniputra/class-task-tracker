@@ -50,6 +50,26 @@
         element.hidden = message === '';
     }
 
+    function renderDeadlineNotice(element, data) {
+        element.replaceChildren();
+        element.hidden = data.count === 0;
+        if (element.hidden) {
+            return;
+        }
+
+        const message = document.createElement('p');
+        message.textContent = `Ada ${data.count} tugas yang mendekati tenggat dalam ${data.days} hari:`;
+
+        const taskList = document.createElement('ul');
+        data.tasks.forEach((task) => {
+            const item = document.createElement('li');
+            item.textContent = `${task.title} (batas waktu: ${formatDueDate(task.due_date)})`;
+            taskList.append(item);
+        });
+
+        element.append(message, taskList);
+    }
+
     function clearFieldErrors(form) {
         form.querySelectorAll('[data-error-for]').forEach((element) => {
             element.textContent = '';
@@ -226,6 +246,11 @@
         }).format(date);
     }
 
+    function localDateTimeToUtc(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? value : date.toISOString();
+    }
+
     function createTaskElement(task, role, handlers) {
         const article = document.createElement('article');
         article.className = 'task-card';
@@ -316,6 +341,7 @@
 
         setDefaultButtonLabels();
         const notice = page.querySelector('[data-notice]');
+        const deadlineNotice = page.querySelector('[data-deadline-notice]');
         const taskList = page.querySelector('[data-task-list]');
         const loadingMessage = page.querySelector('[data-loading]');
         const emptyMessage = page.querySelector('[data-empty]');
@@ -347,7 +373,7 @@
                 params.set('status', status);
             }
             params.set('page', String(pageNumber));
-            params.set('per_page', '10');
+            params.set('per_page', '5');
 
             try {
                 const response = await apiRequest(`/tasks?${params.toString()}`);
@@ -402,9 +428,18 @@
             try {
                 await apiRequest(`/tasks/${task.id}/complete`, { method });
                 await loadTasks();
+                await loadDeadlineNotice();
             } catch (error) {
                 setNotice(notice, error.message, 'error');
             }
+        }
+
+        async function loadDeadlineNotice() {
+            deadlineNotice.replaceChildren();
+            deadlineNotice.hidden = true;
+
+            const response = await apiRequest('/tasks/upcoming-deadlines');
+            renderDeadlineNotice(deadlineNotice, response.data);
         }
 
         async function deleteTask(task) {
@@ -415,6 +450,7 @@
             try {
                 await apiRequest(`/tasks/${task.id}`, { method: 'DELETE' });
                 await loadTasks();
+                await loadDeadlineNotice();
                 setNotice(notice, 'Tugas berhasil dihapus.', 'success');
             } catch (error) {
                 setNotice(notice, error.message, 'error');
@@ -429,6 +465,7 @@
 
             const payload = authFormPayload(taskForm);
             payload.description = payload.description || null;
+            payload.due_date = localDateTimeToUtc(payload.due_date);
             payload.class_id = Number(payload.class_id);
             const isEditing = currentTaskId !== null;
             const path = isEditing ? `/tasks/${currentTaskId}` : '/tasks';
@@ -443,6 +480,7 @@
                 resetTaskEditor();
                 pageNumber = 1;
                 await loadTasks();
+                await loadDeadlineNotice();
                 setNotice(notice, isEditing ? 'Tugas berhasil diperbarui.' : 'Tugas berhasil dibuat.', 'success');
             } catch (error) {
                 showFieldErrors(taskForm, error.errors || {});
@@ -511,6 +549,7 @@
                 }
 
                 await loadTasks();
+                await loadDeadlineNotice();
             } catch (error) {
                 setNotice(notice, error.message, 'error');
             }

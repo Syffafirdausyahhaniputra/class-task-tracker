@@ -25,6 +25,7 @@
     </section>
 
     <div class="notice" data-notice role="status" aria-live="polite" hidden></div>
+    <div class="notice notice-deadline" data-deadline-notice role="status" aria-live="polite" hidden></div>
 
     <section class="panel task-editor" data-task-editor hidden>
         <div class="section-heading">

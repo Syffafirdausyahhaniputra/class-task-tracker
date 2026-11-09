@@ -15,6 +15,7 @@ Route::get('/classes', [ClassController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks', [TaskController::class, 'index']);
+    Route::get('/tasks/upcoming-deadlines', [TaskController::class, 'upcomingDeadlines']);
     Route::get('/tasks/{task}', [TaskController::class, 'show']);
 });
 

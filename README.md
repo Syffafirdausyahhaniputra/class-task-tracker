@@ -7,6 +7,12 @@ Semua akun contoh menggunakan password `Password123`.
 | Guru | `guru@sekolah.test` |
 | Siswa | `siswa1@sekolah.test`, `siswa2@sekolah.test`, `siswa3@sekolah.test` |
 
+## Pemberitahuan tenggat
+
+Dashboard menampilkan pemberitahuan untuk tugas yang tenggatnya dalam tiga hari ke depan. Siswa hanya mendapat pemberitahuan untuk tugas kelasnya yang belum selesai, sedangkan guru hanya melihat tugas yang dibuatnya.
+
+Waktu pada formulir tenggat mengikuti zona waktu lokal browser. Sebelum dikirim, waktu dikonversi ke UTC agar penyimpanan konsisten; saat ditampilkan atau diedit, waktu dikonversi kembali ke zona waktu browser.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
