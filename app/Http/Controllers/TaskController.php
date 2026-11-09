@@ -82,7 +82,7 @@ class TaskController extends Controller
             'data' => [
                 'count' => $tasks->count(),
                 'days' => 3,
-                'tasks' => $tasks->map(fn (Task $task): array => [
+                'tasks' => $tasks->map(fn ($task): array => [
                     'id' => $task->id,
                     'title' => $task->title,
                     'due_date' => $task->due_date,

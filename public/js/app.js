@@ -158,8 +158,6 @@
         const notice = page.querySelector('[data-notice]');
         const loginForm = page.querySelector('[data-form="login"]');
         const registerForm = page.querySelector('[data-form="register"]');
-        const roleSelect = registerForm.elements.namedItem('role');
-        const classField = page.querySelector('[data-class-field]');
         const classSelect = registerForm.elements.namedItem('class_id');
 
         page.querySelectorAll('[data-auth-tab]').forEach((tab) => {
@@ -167,12 +165,6 @@
                 setNotice(notice, '');
                 switchAuthPanel(page, tab.dataset.authTab);
             });
-        });
-
-        roleSelect.addEventListener('change', () => {
-            const needsClass = roleSelect.value === 'student';
-            classField.hidden = !needsClass;
-            classSelect.required = needsClass;
         });
 
         loadClasses(classSelect, 'Pilih kelas').catch((error) => {
@@ -210,10 +202,6 @@
 
             try {
                 const payload = authFormPayload(registerForm);
-                if (payload.role !== 'student') {
-                    delete payload.class_id;
-                }
-
                 await apiRequest('/auth/register', {
                     method: 'POST',
                     body: JSON.stringify(payload),
@@ -221,8 +209,6 @@
 
                 loginForm.elements.namedItem('email').value = payload.email;
                 registerForm.reset();
-                classField.hidden = false;
-                classSelect.required = true;
                 switchAuthPanel(page, 'login');
                 setNotice(notice, 'Pendaftaran berhasil. Silakan masuk dengan akun Anda.', 'success');
             } catch (error) {

@@ -40,7 +40,7 @@
 
         <section id="register-panel" role="tabpanel" aria-labelledby="register-tab" data-auth-panel="register" hidden>
             <h2>Buat akun</h2>
-            <p class="muted">Pilih peran dan isi informasi akun Anda.</p>
+            <p class="muted">Daftar sebagai siswa untuk melihat tugas kelas Anda.</p>
             <form data-form="register" novalidate>
                 <label for="register-name">Nama</label>
                 <input id="register-name" name="name" type="text" autocomplete="name" required>
@@ -54,11 +54,8 @@
                 <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
                 <small class="field-error" data-error-for="password"></small>
 
-                <label for="register-role">Peran</label>
-                <select id="register-role" name="role" required>
-                    <option value="student">Siswa</option>
-                    <option value="teacher">Guru</option>
-                </select>
+                <p class="registration-role"><strong>Peran:</strong> Siswa</p>
+                <input name="role" type="hidden" value="student">
                 <small class="field-error" data-error-for="role"></small>
 
                 <div data-class-field>

@@ -15,11 +15,8 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
-
-        // Guru tidak terikat kelas; siswa hanya memakai kelas yang tervalidasi.
-        if ($data['role'] !== 'student') {
-            $data['class_id'] = null;
-        }
+        // Registrasi publik hanya boleh membuat akun siswa.
+        $data['role'] = 'student';
 
         // Cast hashed pada model menyimpan password sebagai hash.
         $user = User::create($data);

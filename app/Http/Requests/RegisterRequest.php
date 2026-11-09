@@ -26,8 +26,8 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
-            'role' => ['required', 'in:teacher,student'],
-            'class_id' => ['nullable', 'required_if:role,student', 'integer', 'exists:classes,id'],
+            'role' => ['required', 'in:student'],
+            'class_id' => ['required', 'integer', 'exists:classes,id'],
         ];
     }
 
@@ -40,9 +40,9 @@ class RegisterRequest extends FormRequest
             'email.unique' => 'Email sudah terdaftar.',
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal 8 karakter.',
-            'role.required' => 'Peran wajib dipilih.',
-            'role.in' => 'Peran harus teacher atau student.',
-            'class_id.required_if' => 'Kelas wajib dipilih untuk siswa.',
+            'role.required' => 'Peran wajib diisi.',
+            'role.in' => 'Pendaftaran publik hanya tersedia untuk siswa.',
+            'class_id.required' => 'Kelas wajib dipilih.',
             'class_id.exists' => 'Kelas yang dipilih tidak ditemukan.',
         ];
     }
